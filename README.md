@@ -29,13 +29,15 @@ For Integration in any framework please refer StencilJS Documentation:
 
 Add the container component where you want to include your micro applications.
 
-`<devb-micro-container />`
+```jsx
+<devb-micro-container />
+```
 
 ### Providing Route Configuration:
 
 Using following script to include route configuration in your app -
 
-`
+```jsx
 <script>
     const container = document.querySelector('devb-micro-container');
     container.routeConfig = [
@@ -43,27 +45,27 @@ Using following script to include route configuration in your app -
       { name: 'Child 2', appName:'child-2', url: 'http://localhost:3336' }
   ];
 </script>
-`
+```
 
 ### Navigation from Child App:
 
 For any links/buttions performing routing navigation in your app, please enclose them in `micro-link` tag:
 
-`
+```jsx
 <!-- Note that the below componet just used to reflect URL of inner app to the main app. Internal navigation needs to be performed via the button itself. -->
 <devb-micro-link app-name='child-1' path='/profile'>
     <button>Profile page</button>
 </devb-micro-link>
-`
+```
 
 ### Navigation from Main App:
 
 This is useful if you want to move from one app to another using buttons/menu items in your main app.
 
-`
+```jsx
 <!-- The following link will perform navigation too. -->
 <devb-micro-link app-name='child-1' path='/profile' is-child='false'>
     <button>Profile page</button>
 </devb-micro-link>
-`
+```
 
