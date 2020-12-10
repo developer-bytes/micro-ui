@@ -54,8 +54,16 @@ export class MicroContainerComponent {
         }, 500);
 
         MessageHelper.receive(MessageCodes.CHILD_LINK_CLICKED, (data: any) => {
-            // location.hash = `/${data.appName}${data.path}`;
-            history.replaceState(undefined, undefined, `#/${data.appName}${data.path}`);
+            if (data.isExternal) {
+                if (data.appName) {
+                    window.location.hash = `#/${data.appName}${data.path}`;
+                    window.location.reload();
+                } else {
+                    window.location.href = data.path;
+                }
+            } else {
+                history.replaceState(undefined, undefined, `#/${data.appName}${data.path}`);
+            }
         });
         
     }

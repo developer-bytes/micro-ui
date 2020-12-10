@@ -6,6 +6,7 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { RouteConfig } from "./components/micro-container/models/route-config.model";
+import { AppLink } from "./components/micro-link/models";
 export namespace Components {
     interface DevbMicroContainer {
         "navigate": (appName: string, path?: string) => Promise<void>;
@@ -23,6 +24,10 @@ export namespace Components {
           * If Link is clicked from child application.
          */
         "isChild": boolean;
+        /**
+          * If link is external, it will try to navigate from parent.
+         */
+        "isExternal": boolean;
         /**
           * Path of the page within the application, relative to application domain.
          */
@@ -64,9 +69,13 @@ declare namespace LocalJSX {
          */
         "isChild"?: boolean;
         /**
+          * If link is external, it will try to navigate from parent.
+         */
+        "isExternal"?: boolean;
+        /**
           * Event emitted when link is clicked. Value would be path.
          */
-        "onLinkClicked"?: (event: CustomEvent<string>) => void;
+        "onLinkClicked"?: (event: CustomEvent<AppLink>) => void;
         /**
           * Path of the page within the application, relative to application domain.
          */

@@ -1,6 +1,7 @@
 import { Component, Event, EventEmitter, h, Host, Prop } from '@stencil/core';
 import { MessageCodes } from '../../constants';
 import { MessageHelper } from '../../helpers';
+import { AppLink } from './models';
 
 
 @Component({
@@ -23,9 +24,14 @@ export class MicroLinkComponent {
     @Prop() isChild: boolean = true;
 
     /**
+     * If link is external, it will try to navigate from parent.
+     */
+    @Prop() isExternal: boolean = false;
+
+    /**
      * Event emitted when link is clicked. Value would be path.
      */
-    @Event() linkClicked: EventEmitter<string>;
+    @Event() linkClicked: EventEmitter<AppLink>;
 
     constructor() {
         this.linkClickedHandler = this.linkClickedHandler.bind(this);
@@ -40,9 +46,9 @@ export class MicroLinkComponent {
     }
 
     private linkClickedHandler() {
-        this.linkClicked.emit(this.path);
+        this.linkClicked.emit({ path: this.path, appName: this.appName });
         if (this.isChild) {
-            MessageHelper.sendToParent(MessageCodes.CHILD_LINK_CLICKED, { path: this.path, appName: this.appName });
+            MessageHelper.sendToParent(MessageCodes.CHILD_LINK_CLICKED, { path: this.path, appName: this.appName, isExternal: this.isExternal });
         } else {
             const mfeApp = document.querySelector('devb-micro-container');
             if (mfeApp) {
