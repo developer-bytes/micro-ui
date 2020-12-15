@@ -1,4 +1,5 @@
 
+
 export class MessageHelper {
     public static origin: string = window.location.ancestorOrigins && window.location.ancestorOrigins.length ?
         window.location.ancestorOrigins[0] : undefined;
@@ -8,10 +9,11 @@ export class MessageHelper {
         if (parent && parent.window) {
             winRef = parent.window;
         }
+        const origin = window.location.hostname.indexOf('localhost') >= 0 ? '*' : this.origin;
         winRef.postMessage({
             name,
             data
-        }, this.origin);
+        }, origin);
     }
 
     public static sendToChild(name: string, data: any, iframe: any) {
