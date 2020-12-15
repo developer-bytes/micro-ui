@@ -8,7 +8,10 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { RouteConfig } from "./components/micro-container/models/route-config.model";
 import { AppLink } from "./components/micro-link/models";
 export namespace Components {
+    interface DevbMicroChildEvent {
+    }
     interface DevbMicroContainer {
+        "messageToChildApp": (data: any) => Promise<void>;
         "navigate": (appName: string, path?: string) => Promise<void>;
         /**
           * Micro frontend routing configuration, used to identify applications and their urls. NOTE: Micro Application URLs must be on same domain, or you have to disable browser security to run in different domain on local environment.
@@ -35,6 +38,12 @@ export namespace Components {
     }
 }
 declare global {
+    interface HTMLDevbMicroChildEventElement extends Components.DevbMicroChildEvent, HTMLStencilElement {
+    }
+    var HTMLDevbMicroChildEventElement: {
+        prototype: HTMLDevbMicroChildEventElement;
+        new (): HTMLDevbMicroChildEventElement;
+    };
     interface HTMLDevbMicroContainerElement extends Components.DevbMicroContainer, HTMLStencilElement {
     }
     var HTMLDevbMicroContainerElement: {
@@ -48,11 +57,18 @@ declare global {
         new (): HTMLDevbMicroLinkElement;
     };
     interface HTMLElementTagNameMap {
+        "devb-micro-child-event": HTMLDevbMicroChildEventElement;
         "devb-micro-container": HTMLDevbMicroContainerElement;
         "devb-micro-link": HTMLDevbMicroLinkElement;
     }
 }
 declare namespace LocalJSX {
+    interface DevbMicroChildEvent {
+        /**
+          * Event emitted when message is received by child app.
+         */
+        "onMessage"?: (event: CustomEvent<any>) => void;
+    }
     interface DevbMicroContainer {
         /**
           * Micro frontend routing configuration, used to identify applications and their urls. NOTE: Micro Application URLs must be on same domain, or you have to disable browser security to run in different domain on local environment.
@@ -82,6 +98,7 @@ declare namespace LocalJSX {
         "path"?: string;
     }
     interface IntrinsicElements {
+        "devb-micro-child-event": DevbMicroChildEvent;
         "devb-micro-container": DevbMicroContainer;
         "devb-micro-link": DevbMicroLink;
     }
@@ -90,6 +107,7 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
+            "devb-micro-child-event": LocalJSX.DevbMicroChildEvent & JSXBase.HTMLAttributes<HTMLDevbMicroChildEventElement>;
             "devb-micro-container": LocalJSX.DevbMicroContainer & JSXBase.HTMLAttributes<HTMLDevbMicroContainerElement>;
             "devb-micro-link": LocalJSX.DevbMicroLink & JSXBase.HTMLAttributes<HTMLDevbMicroLinkElement>;
         }

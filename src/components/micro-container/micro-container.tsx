@@ -76,6 +76,11 @@ export class MicroContainerComponent {
             history.replaceState(undefined, undefined, `#/${appName}/${path}`);
         }
     }
+
+    @Method()
+    public async messageToChildApp(data: any) {
+        MessageHelper.sendToChild(MessageCodes.MESSAGE_TO_CHILD, data, this.iframeElement);
+    }
     
     render() {
         return (

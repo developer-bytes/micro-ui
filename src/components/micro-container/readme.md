@@ -14,6 +14,16 @@
 
 ## Methods
 
+### `messageToChildApp(data: any) => Promise<void>`
+
+
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
 ### `navigate(appName: string, path?: string) => Promise<void>`
 
 
