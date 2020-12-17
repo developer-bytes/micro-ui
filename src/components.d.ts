@@ -9,6 +9,8 @@ import { RouteConfig } from "./components/micro-container/models/route-config.mo
 import { AppLink } from "./components/micro-link/models";
 export namespace Components {
     interface DevbMicroChildEvent {
+        "messageToParent": (data: any) => Promise<void>;
+        "navigatingToUrl": (appName: string, path?: string, isExternal?: boolean) => Promise<void>;
     }
     interface DevbMicroContainer {
         "messageToChildApp": (data: any) => Promise<void>;
@@ -67,9 +69,14 @@ declare namespace LocalJSX {
         /**
           * Event emitted when message is received by child app.
          */
-        "onMessage"?: (event: CustomEvent<any>) => void;
+        "onMessageReceived"?: (event: CustomEvent<any>) => void;
     }
     interface DevbMicroContainer {
+        /**
+          * Event emitted when message is received by parent app.
+         */
+        "onMessageReceived"?: (event: CustomEvent<any>) => void;
+        "onPageLoad"?: (event: CustomEvent<any>) => void;
         /**
           * Micro frontend routing configuration, used to identify applications and their urls. NOTE: Micro Application URLs must be on same domain, or you have to disable browser security to run in different domain on local environment.
          */

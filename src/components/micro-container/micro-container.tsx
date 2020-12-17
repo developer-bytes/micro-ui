@@ -1,4 +1,4 @@
-import { Component, h, Host, Method, Prop, State } from '@stencil/core';
+import { Component, Event, EventEmitter, h, Host, Method, Prop, State } from '@stencil/core';
 import { MessageCodes } from '../../constants';
 import { MessageHelper } from '../../helpers';
 import { RouteConfig } from './models/route-config.model';
@@ -16,6 +16,13 @@ export class MicroContainerComponent {
      */
     @Prop() routeConfig: RouteConfig[] = [];
 
+    @Event() pageLoad: EventEmitter; 
+
+    /**
+     * Event emitted when message is received by parent app.
+     */
+    @Event() messageReceived: EventEmitter<any>;
+
     /**
      * Current URL state of micro container.
      */
@@ -27,6 +34,15 @@ export class MicroContainerComponent {
     @State() private scrollheight: number = 200;
 
     private iframeElement: HTMLIFrameElement;
+
+    constructor() {
+        this.iframeLoadHandler = this.iframeLoadHandler.bind(this);
+
+        MessageHelper.receive(MessageCodes.MESSAGE_TO_PARENT, (data: any) => {
+            console.log('devb: Message received to parent', data);
+            this.messageReceived.emit(data);
+        });
+    }
 
     componentWillLoad() {
         // Url configs
@@ -70,25 +86,34 @@ export class MicroContainerComponent {
 
     @Method()
     public async navigate(appName: string, path: string = '') {
+        console.log('devb: Navigating to:', {appName, path});
         const currentNavConfig = this.routeConfig.find(x => x.appName === appName);
         if (currentNavConfig) {
             this.currentUrl = currentNavConfig.url + path;
             history.replaceState(undefined, undefined, `#/${appName}/${path}`);
+        } else {
+            console.warn('devb: Configuration Missing: AppName specified is missing in routeConfig.');
         }
     }
 
     @Method()
     public async messageToChildApp(data: any) {
+        console.log('devb: Sending message to child app:', data);
         MessageHelper.sendToChild(MessageCodes.MESSAGE_TO_CHILD, data, this.iframeElement);
     }
     
     render() {
         return (
             <Host style={{ display: 'block' }}>
-                <iframe width='100%' height={`${this.scrollheight}px`} frameBorder='0' src={this.currentUrl} ref={(el) => { this.iframeElement = el; }} />
+                <iframe width='100%' height={`${this.scrollheight}px`} frameBorder='0' src={this.currentUrl} onLoad={this.iframeLoadHandler}
+                ref={(el) => { this.iframeElement = el; }} />
             </Host>
         );
     }
 
+    private iframeLoadHandler() {
+        console.log('devb: Micro App loaded with URL:', this.currentUrl);
+        this.pageLoad.emit({ url: this.currentUrl });
+    }
 
 }

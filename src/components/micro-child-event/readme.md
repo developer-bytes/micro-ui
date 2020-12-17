@@ -7,9 +7,32 @@
 
 ## Events
 
-| Event     | Description                                          | Type               |
-| --------- | ---------------------------------------------------- | ------------------ |
-| `message` | Event emitted when message is received by child app. | `CustomEvent<any>` |
+| Event             | Description                                          | Type               |
+| ----------------- | ---------------------------------------------------- | ------------------ |
+| `messageReceived` | Event emitted when message is received by child app. | `CustomEvent<any>` |
+
+
+## Methods
+
+### `messageToParent(data: any) => Promise<void>`
+
+
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
+### `navigatingToUrl(appName: string, path?: string, isExternal?: boolean) => Promise<void>`
+
+
+
+#### Returns
+
+Type: `Promise<void>`
+
+
 
 
 ----------------------------------------------
