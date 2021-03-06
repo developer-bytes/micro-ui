@@ -4,4 +4,5 @@ export interface RouteConfig {
     appName: string;
     url: string;
     active?: boolean;
+    queryString?: string;
 }

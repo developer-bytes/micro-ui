@@ -9,7 +9,8 @@ export class MessageHelper {
         if (parent && parent.window) {
             winRef = parent.window;
         }
-        const origin = window.location.hostname.indexOf('localhost') >= 0 ? '*' : this.origin;
+        const origin = window.location.hostname.indexOf('localhost') >= 0 ? '*' : window.location.ancestorOrigins && window.location.ancestorOrigins.length ?
+        window.location.ancestorOrigins[0] : window.location.origin;
         winRef.postMessage({
             name,
             data

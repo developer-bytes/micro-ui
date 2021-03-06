@@ -16,6 +16,6 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@devbytes/micro-ui": "0.0.5"
+    "@devbytes/micro-ui": "0.0.10"
   }
 }

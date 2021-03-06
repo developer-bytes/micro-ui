@@ -52,13 +52,21 @@ export class MicroContainerComponent {
         const appUrl = pathArr.length ? '/' + pathArr.join('/') : '';
         
         const currentNavConfig = this.routeConfig.find(x => x.appName === currentAppName);
+        let newUrl = '';
         if (currentNavConfig) {
-            this.currentUrl = currentNavConfig.url + appUrl;
+            newUrl = currentNavConfig.url + appUrl;
         }
         if (!this.currentUrl) {
             const activeNavConfig = this.routeConfig.find(x => x.active);
-            this.currentUrl = activeNavConfig.url + appUrl;
+            newUrl = activeNavConfig.url + appUrl;
             window.location.hash = `/${activeNavConfig.appName}/${appUrl}`;
+        }
+
+        if (currentNavConfig.queryString) {
+            const delimeter = newUrl.indexOf('?') >= 0 ? '&' : '?';
+            this.currentUrl = newUrl + delimeter + currentNavConfig.queryString;
+        } else {
+            this.currentUrl = newUrl;
         }
 
         // Setting height of iframe based on content.
