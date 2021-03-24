@@ -52,11 +52,11 @@ export class MicroContainerComponent {
         const appUrl = pathArr.length ? '/' + pathArr.join('/') : '';
         
         const currentNavConfig = this.routeConfig.find(x => x.appName === currentAppName);
-        let newUrl = '';
+        let newUrl = this.currentUrl;
         if (currentNavConfig) {
             newUrl = currentNavConfig.url + appUrl;
         }
-        if (!this.currentUrl) {
+        if (!newUrl) {
             const activeNavConfig = this.routeConfig.find(x => x.active);
             newUrl = activeNavConfig.url + appUrl;
             window.location.hash = `/${activeNavConfig.appName}/${appUrl}`;
