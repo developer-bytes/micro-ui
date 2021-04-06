@@ -5,4 +5,5 @@ export interface RouteConfig {
     url: string;
     active?: boolean;
     queryString?: string;
+    staticHeight?: string;
 }

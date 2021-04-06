@@ -33,6 +33,8 @@ export class MicroContainerComponent {
      */
     @State() private scrollheight: number = 200;
 
+    @State() private staticHeight: string;
+
     private iframeElement: HTMLIFrameElement;
 
     constructor() {
@@ -52,6 +54,8 @@ export class MicroContainerComponent {
         const appUrl = pathArr.length ? '/' + pathArr.join('/') : '';
         
         const currentNavConfig = this.routeConfig.find(x => x.appName === currentAppName);
+        this.setStaticHeight(currentNavConfig);
+
         let newUrl = this.currentUrl;
         if (currentNavConfig) {
             newUrl = currentNavConfig.url + appUrl;
@@ -96,6 +100,8 @@ export class MicroContainerComponent {
     public async navigate(appName: string, path: string = '') {
         console.log('devb: Navigating to:', {appName, path});
         const currentNavConfig = this.routeConfig.find(x => x.appName === appName);
+        this.setStaticHeight(currentNavConfig);
+
         if (currentNavConfig) {
             this.currentUrl = currentNavConfig.url + path;
             history.replaceState(undefined, undefined, `#/${appName}/${path}`);
@@ -113,8 +119,13 @@ export class MicroContainerComponent {
     render() {
         return (
             <Host style={{ display: 'block' }}>
-                <iframe width='100%' height={`${this.scrollheight}px`} frameBorder='0' src={this.currentUrl} onLoad={this.iframeLoadHandler}
-                ref={(el) => { this.iframeElement = el; }} />
+                <iframe
+                    width='100%'
+                    height={this.staticHeight ? this.staticHeight : `${this.scrollheight}px`}
+                    frameBorder='0'
+                    src={this.currentUrl}
+                    onLoad={this.iframeLoadHandler}
+                    ref={(el) => { this.iframeElement = el; }} />
             </Host>
         );
     }
@@ -122,6 +133,10 @@ export class MicroContainerComponent {
     private iframeLoadHandler() {
         console.log('devb: Micro App loaded with URL:', this.currentUrl);
         this.pageLoad.emit({ url: this.currentUrl });
+    }
+
+    private setStaticHeight(currentNavConfig: RouteConfig) {
+        this.staticHeight = currentNavConfig.staticHeight ? currentNavConfig.staticHeight : undefined;
     }
 
 }
